@@ -1,0 +1,16 @@
+{
+  "name": "otp-lead-form",
+  "version": "1.0.0",
+  "description": "Standalone OTP-verified lead capture form with WhatsApp OTP",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0",
+    "express": "^4.21.0"
+  }
+}
