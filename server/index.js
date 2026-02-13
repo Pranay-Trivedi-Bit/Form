@@ -16,6 +16,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // API Routes
 app.use('/api/otp', require('./routes/otp'));
+app.use('/api/captcha', require('./routes/captcha'));
 
 // Fallback
 app.get('/', (req, res) => {
