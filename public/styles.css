@@ -284,6 +284,33 @@ textarea { resize: vertical; min-height: 80px; }
   box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.25), 0 0 16px rgba(167, 139, 250, 0.15);
 }
 
+/* ============ Demo Banner ============ */
+.demo-banner {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 0.8125rem;
+  color: #fbbf24;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.demo-banner code {
+  background: rgba(245, 158, 11, 0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 2px;
+}
+
+.demo-banner small {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
 /* ============ Verify Section ============ */
 .verify-section { text-align: center; }
 

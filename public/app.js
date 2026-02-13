@@ -135,7 +135,17 @@
         goToStep(2);
         document.getElementById('sentPhone').textContent = currentPhone;
         startCountdown();
-        document.querySelectorAll('.otp-digit')[0].focus();
+
+        // Demo mode: if WhatsApp couldn't deliver, auto-fill OTP and show banner
+        if (res.data.demo && res.data.otp) {
+          var digits = document.querySelectorAll('.otp-digit');
+          for (var i = 0; i < res.data.otp.length && i < digits.length; i++) {
+            digits[i].value = res.data.otp[i];
+          }
+          showDemoBanner(res.data.otp);
+        } else {
+          document.querySelectorAll('.otp-digit')[0].focus();
+        }
       })
       .catch(function () {
         restoreSendBtn(btn);
@@ -270,6 +280,18 @@
 
   function stopCountdown() {
     if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
+  }
+
+  // ---- Demo Banner ----
+  function showDemoBanner(otp) {
+    var existing = document.getElementById('demoBanner');
+    if (existing) existing.remove();
+    var banner = document.createElement('div');
+    banner.id = 'demoBanner';
+    banner.className = 'demo-banner';
+    banner.innerHTML = '<strong>Demo Mode:</strong> WhatsApp delivery pending. OTP auto-filled: <code>' + otp + '</code><br><small>To receive on WhatsApp, first send "Hi" to +91 98407 22417 from this number.</small>';
+    var verifySection = document.querySelector('.verify-section');
+    if (verifySection) verifySection.insertBefore(banner, verifySection.firstChild);
   }
 
   // ---- Reset ----
