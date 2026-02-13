@@ -39,24 +39,27 @@ router.post('/send', async (req, res) => {
 
     const text = `Your verification code is: ${code}\n\nThis code expires in 5 minutes. Do not share it with anyone.`;
 
-    // Try sending via WhatsApp
+    // Try sending via WhatsApp (requires 24hr conversation window)
     let whatsappSent = false;
     try {
       await whatsappApi.sendTextMessage(cleaned, text);
       whatsappSent = true;
       console.log(`[OTP] Sent to ${cleaned} via WhatsApp: ${code}`);
     } catch (waErr) {
-      console.warn(`[OTP] WhatsApp delivery failed for ${cleaned}, using demo mode. Code: ${code}`);
+      console.warn(`[OTP] WhatsApp send failed for ${cleaned}. Code: ${code}`);
     }
 
-    // Always return success — in demo mode, include OTP for testing
-    const response = { success: true, message: 'OTP sent via WhatsApp' };
-
-    if (!whatsappSent) {
-      response.message = 'WhatsApp delivery pending — OTP shown below for testing';
-      response.demo = true;
-      response.otp = code;
-    }
+    // Always return OTP in response so the form can auto-fill it.
+    // WhatsApp text messages require the recipient to message the business
+    // number first (24hr window). Until then, OTP is shown on screen.
+    const response = {
+      success: true,
+      message: whatsappSent
+        ? 'OTP sent via WhatsApp'
+        : 'WhatsApp delivery pending — OTP shown on screen',
+      demo: !whatsappSent,
+      otp: code
+    };
 
     res.json(response);
   } catch (err) {

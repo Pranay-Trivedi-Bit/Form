@@ -136,13 +136,13 @@
         document.getElementById('sentPhone').textContent = currentPhone;
         startCountdown();
 
-        // Demo mode: if WhatsApp couldn't deliver, auto-fill OTP and show banner
-        if (res.data.demo && res.data.otp) {
+        // Auto-fill OTP digits if returned in response
+        if (res.data.otp) {
           var digits = document.querySelectorAll('.otp-digit');
           for (var i = 0; i < res.data.otp.length && i < digits.length; i++) {
             digits[i].value = res.data.otp[i];
           }
-          showDemoBanner(res.data.otp);
+          showDemoBanner(res.data.otp, res.data.demo);
         } else {
           document.querySelectorAll('.otp-digit')[0].focus();
         }
@@ -283,13 +283,20 @@
   }
 
   // ---- Demo Banner ----
-  function showDemoBanner(otp) {
+  function showDemoBanner(otp, isDemo) {
     var existing = document.getElementById('demoBanner');
     if (existing) existing.remove();
     var banner = document.createElement('div');
     banner.id = 'demoBanner';
     banner.className = 'demo-banner';
-    banner.innerHTML = '<strong>Demo Mode:</strong> WhatsApp delivery pending. OTP auto-filled: <code>' + otp + '</code><br><small>To receive on WhatsApp, first send "Hi" to +91 98407 22417 from this number.</small>';
+    if (isDemo) {
+      banner.innerHTML = '<strong>OTP auto-filled:</strong> <code>' + otp + '</code><br><small>WhatsApp delivery requires messaging +91 98407 22417 first. Click "Verify &amp; Submit" to continue.</small>';
+    } else {
+      banner.innerHTML = '<strong>OTP sent on WhatsApp &amp; auto-filled:</strong> <code>' + otp + '</code><br><small>Check WhatsApp for the verification message. Click "Verify &amp; Submit" to continue.</small>';
+      banner.style.background = 'rgba(52, 211, 153, 0.12)';
+      banner.style.borderColor = 'rgba(52, 211, 153, 0.3)';
+      banner.style.color = '#34d399';
+    }
     var verifySection = document.querySelector('.verify-section');
     if (verifySection) verifySection.insertBefore(banner, verifySection.firstChild);
   }
